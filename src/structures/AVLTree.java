@@ -76,6 +76,61 @@ public class AVLTree<T extends Comparable<T>> {
 
 	}
 
+	public AVLNode<T> delete(AVLNode<T> root, T data) {
+
+		if (root == null) {
+			return root;
+		}
+		if (data.compareTo(root.getData()) < 0) {
+			root.setLeft(delete(root.getLeft(), data));
+		} else if (data.compareTo(root.getData()) > 0) {
+			root.setRight(delete(root.getRight(), data));
+		} else {
+
+			if (root.getLeft() == null || root.getRight() == null) {
+
+				AVLNode<T> temp = null;
+				if (temp == root.getLeft()) {
+					temp = root.getRight();
+				} else {
+					temp = root.getLeft();
+				}
+
+				if (temp == null) {
+					temp = root;
+					root = null;
+				} else {
+					root = temp;
+				}
+
+			} else {
+				AVLNode<T> temp = minValueNode(root.getRight());
+				root.setData(temp.getData());
+				root.setRight(delete(root.getRight(), temp.getData()));
+			}
+
+		}
+		root.setHeight(Math.max(height(root.getLeft()), height(root.getRight())) + 1);
+		int balanceFactor = balanceFactor(root);
+		if (balanceFactor < -1) {
+			if (balanceFactor(root.getRight()) > 0) {
+				root.setRight(rotateRight(root.getRight()));
+				return rotateLeft(root);
+			} else {
+				return rotateLeft(root);
+			}
+		} else if (balanceFactor > 1) {
+			if (balanceFactor(root.getLeft()) < 0) {
+				root.setLeft(rotateLeft(root.getLeft()));
+				return rotateRight(root);
+			} else {
+				return rotateRight(root);
+			}
+		}
+		return root;
+
+	}
+
 	public int balanceFactor(AVLNode<T> node) {
 		if (node == null) {
 			return 0;
@@ -110,6 +165,16 @@ public class AVLTree<T extends Comparable<T>> {
 			return 0;
 		}
 		return node.getHeight();
+	}
+
+	private AVLNode<T> minValueNode(AVLNode<T> node) {
+
+		AVLNode<T> current = node;
+		while (current.getLeft() != null) {
+			current = current.getLeft();
+		}
+		return current;
+
 	}
 
 }
