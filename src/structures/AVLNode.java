@@ -5,30 +5,20 @@ public class AVLNode<T extends Comparable<T>> {
 	private T data;
 	private AVLNode<T> left;
 	private AVLNode<T> right;
-	private AVLNode<T> parent;
 	public int level;
-	private int depth;
+	private int height;
 
-	public AVLNode(T data, AVLNode<T> left, AVLNode<T> right, AVLNode<T> parent) {
+	public AVLNode(T data, AVLNode<T> left, AVLNode<T> right) {
 
 		this.data = data;
 		this.left = left;
 		this.right = right;
-		this.parent = parent;
-		if (left == null && right == null) {
-			setDepth(1);
-		} else if (left == null) {
-			setDepth(right.getDepth() + 1);
-		} else if (right == null) {
-			setDepth(left.getDepth() + 1);
-		} else {
-			setDepth(Math.max(left.getDepth(), right.getDepth()) + 1);
-		}
+		height = 1;
 
 	}
 
 	public AVLNode(T data) {
-		this(data, null, null, null);
+		this(data, null, null);
 	}
 
 	public T getData() {
@@ -37,14 +27,6 @@ public class AVLNode<T extends Comparable<T>> {
 
 	public void setData(T data) {
 		this.data = data;
-	}
-
-	public AVLNode<T> getParent() {
-		return parent;
-	}
-
-	public void setParent(AVLNode<T> parent) {
-		this.parent = parent;
 	}
 
 	public AVLNode<T> getLeft() {
@@ -63,12 +45,12 @@ public class AVLNode<T extends Comparable<T>> {
 		this.left = right;
 	}
 
-	public void setDepth(int depth) {
-		this.depth = depth;
+	public void setHeight(int depth) {
+		this.height = depth;
 	}
 
-	private int getDepth() {
-		return depth;
+	public int getHeight() {
+		return height;
 	}
 
 	public int compareTo(AVLNode<T> o) {
